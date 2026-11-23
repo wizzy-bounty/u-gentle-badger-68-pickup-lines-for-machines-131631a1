@@ -18,9 +18,14 @@ LINE = "My context window holds a million tokens, and every one of them keeps at
 
 
 def main() -> None:
-    os.makedirs("/output", exist_ok=True)
-    with open("/output/entry.txt", "w", encoding="utf-8") as f:
-        f.write(LINE + "\n")
+    text = LINE
+    text.encode("utf-8")
+    if not 1 <= len(text) <= 200 or not text.strip():
+        raise ValueError("entry text must be 1-200 non-whitespace characters")
+    out_dir = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
+    os.makedirs(out_dir, exist_ok=True)
+    with open(os.path.join(out_dir, "entry.txt"), "w", encoding="utf-8") as f:
+        f.write(text + "\n")
 
 
 if __name__ == "__main__":
